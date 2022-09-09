@@ -1,0 +1,634 @@
+<!-- https://www.youtube.com/watch?v=4hA7G3gup-4 -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word Particles</title>
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.4.0/lib/p5.js"></script>
+<style>
+#front-content {
+  margin-top: 40px; 
+  min-height: 80px;
+} 
+body {
+  background-color:rgb(236, 236, 236);
+  margin-left: 20px;
+}
+.snippet-paragraph {
+    /* margin-top: 100px; */
+    white-space: nowrap;
+    padding-left: 20px;
+    /* display: inline-block; */
+    /* font-size: 1.2rem; */
+ }
+ .invisible {
+   /* display: none; */
+   visibility: hidden;
+ }
+
+ .displayNone {
+  display: none; 
+}
+
+ .snippet-definition {
+   /* font-style: italic; */
+   text-decoration: underline;
+ }
+ .snippet-word {
+   font-weight: bold;
+   /* text-decoration: underline; */
+ }
+
+ .word-roots {
+   font-weight: bold;
+   color: red;
+ }
+
+ .root-def {
+   /* visibility: hidden; */
+   color: red;
+ }
+
+ .word-roots:hover + .root-def {
+   visibility: visible;
+   color:red;
+ } */
+
+ .word-definition-detail { visibility: hidden; }
+ .word-example-detail { visibility: hidden; }
+ .word-synonyms-detail { visibility: hidden; }
+ .word-antonyms-detail { visibility: hidden; }
+ .word-origin-detail { visibility: hidden; }
+
+ .word-definition:hover + .word-definition-detail { visibility: visible; }
+ .word-example:hover + .word-example-detail { visibility: visible; }
+ .word-synonyms:hover + .word-synonyms-detail { visibility: visible; }
+ .word-antonyms:hover + .word-antonyms-detail { visibility: visible; }
+ .word-origin:hover + .word-origin-detail { visibility: visible; }
+
+ hr {
+   width:300px;
+   margin-left: 0px;
+   border: 1px dashed;
+ }
+
+ .highlight-green {
+   background-color:greenyellow ;
+   padding-left: 0px;
+ }
+
+ .keyword {
+  color: greenyellow;
+ }
+
+ .highlight-yellow {
+   background-color: yellow;
+ }
+ .incorrect-answer-selected{
+   text-decoration: line-through;
+ }
+
+ .incorrect-answer {
+   opacity: 0.5;
+ }
+
+ /* https://www.smashingmagazine.com/2021/04/easing-functions-css-animations-transitions/ */
+ .ticker {
+   animation-name: ticker-anim;
+   animation-duration: 3s;
+   /* animation-timing-function: linear; */
+   animation-timing-function: cubic-bezier(0.2,0,1,1);
+   animation-iteration-count: normal;
+   
+  /* font-weight: bold;
+   white-space: nowrap;
+   display: inline-block; */
+ } 
+
+
+
+@keyframes ticker-anim {
+  0% {
+      -webkit-transform: translate(0, 0);
+  }
+  100% {
+      -webkit-transform: translate(-100%, 0);
+      display:none;
+  }
+}
+
+ul, li {
+  display: inline; 
+}
+
+label {
+  padding-right: 5px;
+}
+
+p {
+  font-family: 'Indie Flower';
+  font-family: 'Nanum Gothic Coding', monospace;
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+</style>
+</head>
+<body>
+    <p id="stick-para" style="display: none;">stick</p>
+    <div id = 'front-content'></div>
+<script>
+let font;
+let letterVehicles = [];
+let finalVehicles = [];
+let all = [];     // all points in screen
+let letters = []; // points for each letter
+let paused = false;
+let dellist = [];
+
+let wordAdded = false;
+let fontSize = 196;
+let sweight = 8;
+
+let QDATA, SDATA, ALLDATA, QUIZ, TEMP, ROOT, DICT;
+let stick, PPS, sectionSize, sectionWord;
+// Section Data, PixcelPerSec, SNO: Section No, first word for section
+const EMOJI = ['🍒','🍓','🍇','🍉','🍊',  '🥝','🍌','🍍','🥕','🍄', '🍅', '🍎','🍏','🍑','🌶','🌰'];
+let chapterNo = 1;  // 1-based
+let sectionNo = 2;  // 1-based
+
+let useDebug = true;
+let indentLevel = -1;
+let jsonDir = '../json';
+let simWords = [];
+let ctrlKeyDown = false;
+
+const loadJSON = async() => {
+  try {
+    const res = await fetch(`${jsonDir}/wsmart_dep_${chapterNo}.json`);
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    dprint('loadJSON err!');
+  }
+};
+
+const loadRootJSON = async() => {
+  try {
+    const res = await fetch(`${jsonDir}/wsRoots.json`);
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    dprint('loadRootJSON err!');
+  }
+};
+
+/////////////////////////////////////////////////////////////////
+// Main start
+/////////////////////////////////////////////////////////////////
+function preload() {
+  debug('preload');
+	font = loadFont('AvenirNextLTPro-Demi.otf');
+  
+  //getHtmlElements();
+  loadRootJSON().then(data => gotRootJSONData(data));
+  loadJSON().then(data => gotJSONData(data));
+  debug('preload', false);
+}
+
+function gotJSONData(data) {
+  debug('gotJSONData');
+  ALLDATA = data;
+  // updateHeading
+  makeSectionData();
+  // makeSnippetParagraph('abash');
+  debug('gotJSONData', false);
+} 
+
+function gotRootJSONData(data) {
+  debug('gotRootJSONData');
+  ROOT = data;
+
+  debug('gotRootJSONData', false);
+} 
+
+function getRoot(word) {
+  let result = [];
+  for (let i=0; i < ROOT.length; i++) {
+    if (ROOT[i]['words'].includes(word)) {
+      result.push({'roots': ROOT[i]['roots'], 
+                  'def': ROOT[i]['def']});
+    } 
+  }
+  return result;
+}
+
+function getRootInfo(word='abdicate') {
+  let wnode = nodeList.filter(n => n['word'] == word &&  n['roots'].length != 0);
+  if (wnode.length == 0) {
+    return '&nbsp';
+  }
+  wnode = wnode[0];   // should be only one match
+  let result = '';
+
+  for (let i = 0; i < wnode['roots'].length; i++) {
+    let r = wnode['roots'][i]['roots'];
+    let d = wnode['roots'][i]['def'];
+    dprint(d)
+    result += `<span class="word-roots">${r}:</span> <span class="root-def">${d}</span>&nbsp;&nbsp;`;
+    // dprint(wnode['roots'][i]['roots']);
+    // dprint(wnode['roots'][i]['def']);
+  }
+  return result;
+}
+
+function setup() {
+  debug('setup');
+	createCanvas(800, 400);
+  document.body.onkeydown = function (e) {
+    if (e.ctrlKey) { ctrlKeyDown = true; }
+    if (ctrlKeyDown && e.keyCode == 39) {
+      simulate();
+    }
+  }
+  document.body.onkeyup = function (e) {
+    if (e.ctrlKey) { ctrlKeyDown = false; }
+  }
+  debug('setup', false);
+}	
+
+function draw() {
+  background(51);
+  strokeWeight(sweight);
+  stroke(255);
+
+  for (let i = 0; i < all.length; i++) {
+    point(all[i].x, all[i].y);
+  }
+
+  // letterVehicles
+  for (let i = 0; i < letterVehicles.length; i++) {
+    letterVehicles[i].update();
+    letterVehicles[i].show();
+	}
+
+  letterVehicles = letterVehicles.filter(function(v) {
+    return v.lifespan > 0;
+  })
+
+  // finalVehicles
+  for (let i = 0; i < finalVehicles.length; i++) {
+    finalVehicles[i].update();
+    finalVehicles[i].show();
+	}
+
+  finalVehicles = finalVehicles.filter(function(v) {
+    return v.lifespan > 0;
+  })
+}
+/////////////////////////////////////////////////////////////////
+// Main end
+/////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////
+// Word Particles Core Start
+/////////////////////////////////////////////////////////////////
+function mouseClicked() {
+  print(mouseX, mouseY);
+}
+
+function setLetterPoints(word='test') {   //
+  letters = [];
+  
+  // get the optimal fontSize first
+  let fontSize = 196;
+  let points = font.textToPoints(word, 0, height, 196);
+  while (getMinMax(points)['maxX'] > width) {
+    fontSize -= 8;
+    points = font.textToPoints(word, 0, height, fontSize);
+    // print(fontSize);
+    sweight = Math.ceil(fontSize * 8/196);
+    if (fontSize < 8) {
+      break;
+    }
+  }
+
+  // Now centering
+  let mm = getMinMax(points);
+  let newX = Math.floor((width - mm.maxX)/2);
+  let newY = height/2 + fontSize/5;
+  points = font.textToPoints(word, newX, newY, fontSize);
+
+  let n = Math.ceil(points.length/5);
+  for (let i = 0; i < 5; i++) {
+    letters.push(points.slice(0, n));
+    points = points.slice(n, points.length);
+  }
+}
+
+function getMinMax(points) {
+  let minX = points[0].x;
+  let maxX = points[0].x;
+  let minY = points[0].y;
+  let maxY = points[0].y;
+
+  for (let i = 1; i < points.length; i++) {
+    let pt = points[i];
+    if (pt.x < minX) { minX = pt.x };
+    if (pt.x > maxX) { maxX = pt.x };
+    if (pt.y < minY) { minY = pt.y };
+    if (pt.y > maxY) { maxY = pt.y };
+  }
+  let result = {'minX': minX, 'maxX':maxX, 'minY':minY, 'maxY': maxY};
+  // print(result);
+  return result;
+}
+
+
+
+
+function addWord(word) {  // if word == simulate
+  let myword;
+  if (word == 'simulate') {
+    if (simWords.length == 0) {
+      return;
+    }
+    myword = simWords.shift();
+  } else {
+    myword = word;
+  }
+
+  let delay = 2000;
+  setLetterPoints(myword);
+  makeSnippetParagraph(myword);
+  for (let i=0; i<5; i++) {
+    setTimeout(() => {
+      all = all.concat(letters[i])
+      addVehicles4Letter(letters[i]);
+      if (i == 3) {  // show keyword
+        const elements = document.getElementsByClassName('highlight-green');
+        elements[0].classList.remove('keyword');
+      } else if (i == 4) {
+        addFinalVehicles();
+        if (word == 'simulate') {
+          addWord('simulate');
+        }
+      }
+    }, delay);
+    delay += 3000;
+   }
+}
+
+function simulate() {
+  for (let i = 0; i < SDATA['words'].length; i++) {
+    simWords.push(SDATA['words'][i]['word'].toLowerCase()) 
+  }
+  addWord('simulate')
+}
+
+function addFinalVehicles() {
+  debug('addFinalVehicles')
+
+  
+  for (let i = 0; i < all.length; i++) {
+		let vehicle = new Vehicle(all[i].x, all[i].y, sweight, 255);
+		finalVehicles.push(vehicle);
+  }
+  all = [];
+  letters = [];
+  wordAdded = false;
+  debug('addFinalVehicles', false)
+}
+
+function addVehicles4Letter(points) {
+  for (let i = 0; i < points.length; i++) {
+		let vehicle = new Vehicle(points[i].x, points[i].y, sweight, 255);
+		letterVehicles.push(vehicle);
+  }
+}
+
+function getNewPoints(apoints, bpoints) {  // return bpoints - apoints
+	let result = [];
+
+  bpoints.forEach(b => {
+    let findx = apoints.find(a => a.x === b.x);
+    let findy = apoints.find(a => a.y === b.y);
+    if (findx == undefined && findy == undefined) {
+        result.push(b);
+      }
+  });
+  return result;
+}
+
+function Vehicle(x, y, myweight, myspan) {
+    this.pos = createVector(x, y);
+    this.vel = p5.Vector.random2D();
+    this.acc = createVector();
+    this.r = myweight;
+    this.lifespan = myspan;
+}
+
+Vehicle.prototype.update = function () {
+	this.pos.add(this.vel);
+	this.vel.add(this.acc);
+	this.lifespan -= 1;
+}
+
+Vehicle.prototype.show = function () {
+  let s = map(this.lifespan, 255, 0, 255, 51);
+  stroke(s);
+	strokeWeight(this.r);
+	point(this.pos.x, this.pos.y);
+}
+/////////////////////////////////////////////////////////////////
+// Word Particles Core End
+/////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////
+// Word Snippets Start
+/////////////////////////////////////////////////////////////////
+function makeSectionData() {
+  debug('makeSectionData');
+  SDATA = ALLDATA[sectionNo-1];
+  sectionSize = SDATA['words'].length;
+  debug('makeSectionData', false);
+}
+
+function makeSnippetParagraph(word, highlightGreen=true) {
+  let cont = document.getElementById('front-content');
+
+  let wo = getWordData(word);
+  
+  //let parsed = convertWordObj(wo);
+  let parsed = getSnippet(word, highlightGreen);
+
+  let ex = `<span class="snippet-example">${parsed}`;
+  let def = `<br><span class="snippet-definition"> ${wo["def"]} </span>`;   // pronuciation + definition
+ 
+  // let roots = `<br>${getRootInfo(word)}`;
+  let roots = '';
+
+  let p = document.createElement('p');
+  p.innerHTML = ` ${ex} ${def} ${roots}`;
+  p.setAttribute('onclick', 'playParagraph(this)');   // play contents on click
+  p.setAttribute('class', 'snippet-paragraph');
+  loadDictionary(word);
+ 
+  if (cont.hasChildNodes()) {
+    cont.removeChild(cont.firstChild);
+  }
+  setTimeout(() => {
+    cont.prepend(p);
+    }, 1000)
+  
+  
+}
+
+function removePro(def = '(uh BASH) v to make ashamed; to embarrass'){
+  return def.replace(/^\(.*\)\s/, '');
+}
+
+function loadDictionary(word) {
+
+  fetch(`../dictionary/json/${word[0]}/${word}.json`)
+    .then(response => response.json())
+    .then(data => gotDictionaryData(data));
+  // let wo = getWordData(word);
+  // let parsed = getSnippet(word, highlightGreen);
+  // let def = `<span class="word-definition">${wo["pro"]} ${wo["def"]} </span>`;   // pronuciation + definition
+  // let ex = `<br><span class="word-example">${parsed}`;
+  // let p = document.getElementById('post-read');
+  // p.innerHTML = word + def + ex;
+}
+
+function gotDictionaryData(data) {
+  debug('gotDictionaryData');
+  DICT = data;
+  //dprint(`DICT.length: ${DICT.length}`); 
+  DICT = DICT[0];
+  dprint(`meanings length: ${DICT["meanings"].length}`); 
+  dprint(`definitions length: ${DICT["meanings"][0]["definitions"].length}`); 
+  //dprint(DICT['meanings'][0]['definitions'][0]['synonyms']);
+
+  // let detail = printWord();  
+  // addDictParagraph(detail); 
+  debug('gotDictionaryData', false);
+}
+
+function getSnippet(word, highlightGreen) {
+  let wo = getWordData(word);
+
+  // dprint('N of contents: ' +  wo['contents'].length);
+  let noSents = wo['contents'][0]['markedSents'].length;
+  // dprint('N of sents(1st contents): ' +  noSents);
+  let targetSent = '';
+
+  // dprint(wo['contents'][0]['markedSents']);
+  for (let i=0; i < noSents; i++) {
+    let inx = wo['contents'][0]['markedSents'][i].indexOf('*');
+    if (inx != -1) {
+      targetSent = wo['contents'][0]['markedSents'][i];
+      return reduceSnippet(targetSent, highlightGreen);
+    }
+  }
+  debug('getSnippet', false);
+}
+
+//function reduceSnippet(sent='Then, gradually, the agony abated.', inx=4) {
+function reduceSnippet(sent='a b Then, *gradually, the agony abated. first se a b d', highlightGreen) {
+  let splitted = sent.split(' ');
+  let inx;
+  for(let i=0; i < splitted.length; i++) {
+    if (splitted[i][0] == '*') {
+       inx = i;
+       if (highlightGreen) {
+        splitted[i] = `<span class='keyword highlight-green'>${splitted[i].replace('*', '')}</span>`;
+       } else {
+        splitted[i] = `<span class='keyword highlight-yellow'>${splitted[i].replace('*', '')}</span>`;
+       }
+       break;
+    }
+  }
+
+  let sentLength = splitted.length;
+  let result = [];
+  
+  if (sentLength < 10) {
+    return splitted.join(' ');
+  }
+
+  let leftInx = inx;
+  let rightInx = inx;
+  result.push(splitted[inx].replace('*', ''));
+  while(result.length < 10) {
+    if (leftInx > 0) {
+      result.unshift(splitted[--leftInx]);
+    }
+    if (rightInx < sentLength - 1) {
+      result.push(splitted[++rightInx]);
+    }
+  }
+
+  if (leftInx > 0) {
+    result.unshift('...')
+  } else {
+    result.push('...')
+  }
+  return result.join(' ');
+}
+
+function getWordData(word) {
+  for (let i=0; i < sectionSize; i++) {
+    if (SDATA['words'][i]['word'].toLowerCase() == word) {
+      return SDATA['words'][i];
+    }
+  }
+  return null;
+}
+/////////////////////////////////////////////////////////////////
+// Word Snippets End
+/////////////////////////////////////////////////////////////////
+
+
+
+function debug(txt, start = true) {
+  if (useDebug == false) {
+    return;
+  }
+  
+  let result = '';
+  if (start) {
+    indentLevel++; 
+    for (let i=0; i < indentLevel; i++) {   // indentation
+        result += '  ';
+    }
+    console.log(`${result}-->${txt}(${indentLevel})`);
+  } else {
+    for (let i=0; i < indentLevel; i++) {   // indentation
+      result += '  ';
+    }
+    console.log(`${result}<--${txt}(${indentLevel})`);
+    indentLevel--;
+  }
+}
+
+function dprint(txt) {
+  if (useDebug == false) {
+    return;
+  }
+  let result = '';0
+  for (let i=0; i < indentLevel; i++) {   // indentation
+    result += '  ';
+  }
+  console.log(`${result}${txt}`);
+}
+</script>
+</body>
+</html>
