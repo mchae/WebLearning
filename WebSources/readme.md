@@ -11,9 +11,8 @@
 
 ## ChatGPT
 <img src="Images/ChatGPTCheetSheet.jpg" width="25%"> 
-.AutoGPT
-AUTOGPT NEW 'AI' Takes the Industry By STORM! (8 New CAPABILITIES)
-!(https://www.youtube.com/watch?v=F9UyTIeaT4o)
+### AutoGPT
+![AUTOGPT NEW 'AI' Takes the Industry By STORM! (8 New CAPABILITIES)](https://www.youtube.com/watch?v=F9UyTIeaT4o)
   
 
 
