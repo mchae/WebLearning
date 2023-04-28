@@ -15,5 +15,7 @@
 
 
 ## Tools
-. Best startup tools
-<img src="https://pbs.twimg.com/media/FuxCbrfaAAABYHj?format=png&name=medium" width="25%">
+<figure>
+  <figcatpion>Best startup tools</figcaption>
+  <img src="https://pbs.twimg.com/media/FuxCbrfaAAABYHj?format=png&name=medium" width="25%">
+  </figure>
