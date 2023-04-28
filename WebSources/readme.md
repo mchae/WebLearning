@@ -10,4 +10,4 @@
 
 
 ## ChatGPT
-<img src="Images/ChatGPTCheetSheet.jpg" width="50%">
+<img src="Images/ChatGPTCheetSheet.jpg" width="25%">
