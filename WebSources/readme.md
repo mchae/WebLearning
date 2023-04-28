@@ -10,4 +10,4 @@
 
 
 ## ChatGPT
-<img src="https://twitter.com/itsPaulAi/status/1651869038211915776/photo/1">
+<img src="Images/ChatGPTCheetSheet.jpg">
