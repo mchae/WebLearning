@@ -10,4 +10,4 @@
 
 
 ## ChatGPT
-![Cheet Sheet](https://twitter.com/itsPaulAi/status/1651869038211915776/photo/1)
+![Cheet Sheet]([https://twitter.com/itsPaulAi/status/1651869038211915776/photo/1](https://pbs.twimg.com/media/Fuyd722XoAEoDYR?format=jpg&name=4096x4096)
