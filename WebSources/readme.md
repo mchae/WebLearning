@@ -13,6 +13,7 @@
 
 ## ChatGPT
 [ChatGPT-2D](superusapp.com/chatgpt2d/)
+
 <img src="Images/ChatGPTCheetSheet.jpg" width="25%"> 
 
 ### AutoGPT
