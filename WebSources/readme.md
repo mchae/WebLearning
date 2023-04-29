@@ -32,7 +32,7 @@
 1. [CodingGame](codingame.com)
 2. [JS Robot](https://lab.reaal.me/jsrobot/)
 3. [Code Combat](codecombat.com)
-4. [JS Dares]](jsdares.com)
+4. [JS Dares](jsdares.com)
 5. [Codewars](codewars.com)
 
 [10 Jascript Project with Souce Code](https://morioh.com/p/943dd72ae8d8?f=5c21fb01c16e2556b555ab32)
