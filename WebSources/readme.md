@@ -12,7 +12,7 @@
 
 
 ## ChatGPT
-[ChatGPT-2D](superusapp.com/chatgpt2d/)
+[ChatGPT-2D](https://superusapp.com/chatgpt2d/)
 
 <img src="Images/ChatGPTCheetSheet.jpg" width="25%"> 
 
