@@ -30,6 +30,7 @@
 
 
 ## JavaScript
+[100+ JavaScript Concepts you Need to Know](https://morioh.com/p/21205148f52f)
 #### 5 JavaScript Games for Frontend Developers 🧵↓
 1. [CodingGame](codingame.com)
 2. [JS Robot](https://lab.reaal.me/jsrobot/)
