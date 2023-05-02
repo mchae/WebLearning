@@ -1,7 +1,7 @@
 [Markdown Help](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/)
 
 ## CSS
-<img src="https://pbs.twimg.com/media/FvHSYQBWIAAzaSK?format=jpg&name=large">
+<img src="https://pbs.twimg.com/media/FvHSYQBWIAAzaSK?format=jpg&name=large" width="25%">
 
 #### 5 CSS Games for Frontend Developers 
 1. [Flexbox Froggy](flexboxfroggy.com)
