@@ -31,7 +31,7 @@
 
 
 ## JavaScript
-<img src="https://pbs.twimg.com/media/FvMo8CiXoAIlaMF?format=jpg&name=medium" styles="display:inline" width="25%">
+<img src="https://pbs.twimg.com/media/FvMo8CiXoAIlaMF?format=jpg&name=medium" style="display:inline" width="25%">
 <img src="https://pbs.twimg.com/media/FvHFwYkWYAID750?format=jpg&name=4096x4096" width="25%">
 
 [100+ JavaScript Concepts you Need to Know](https://morioh.com/p/21205148f52f)
