@@ -32,7 +32,7 @@
 
 ## JavaScript
 <div styles="display:flex">
-<img src="https://pbs.twimg.com/media/FvMo8CiXoAIlaMF?format=jpg&name=medium">
+<img src="https://pbs.twimg.com/media/FvMo8CiXoAIlaMF?format=jpg&name=medium" width="25%">
 <img src="https://pbs.twimg.com/media/FvHFwYkWYAID750?format=jpg&name=4096x4096">
 </div>
 
