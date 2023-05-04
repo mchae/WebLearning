@@ -2,7 +2,7 @@
 
 ## HTML
 <div styles="display:flex">
-<img src="https://pbs.twimg.com/media/FvRtUbBXoAkJtwr?format=jpg&name=large" width="25%">
+<img src="https://pbs.twimg.com/media/FvRtUbBXoAkJtwr?format=jpg&name=large" width="25%"> 
 </div>
 
 ## CSS
