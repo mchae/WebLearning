@@ -6,7 +6,9 @@
 </div>
 
 ## CSS
+<div styles="display:flex">
 <img src="https://pbs.twimg.com/media/FvHSYQBWIAAzaSK?format=jpg&name=large" width="25%">
+</div>
 
 #### 5 CSS Games for Frontend Developers 
 1. [Flexbox Froggy](flexboxfroggy.com)
