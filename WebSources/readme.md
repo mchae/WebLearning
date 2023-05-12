@@ -40,6 +40,7 @@
 
 ## JavaScript
 <div styles="display:flex">
+<img src="https://pbs.twimg.com/media/Fv6Z7cfX0AAUkP_?format=jpg&name=large" width="25%">
 <img src="https://miro.medium.com/v2/resize:fit:4800/format:webp/0*7kl7ZYJkzaVxQ5d9.jpg" width="25%">
 <img src="https://pbs.twimg.com/media/FvMo8CiXoAIlaMF?format=jpg&name=medium" width="25%">
 <img src="https://pbs.twimg.com/media/FvHFwYkWYAID750?format=jpg&name=4096x4096" width="25%">
