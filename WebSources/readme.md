@@ -8,6 +8,7 @@
 ## CSS
 [Codecademy Learn CSS](https://www.codecademy.com/learn/learn-css)
 <div styles="display:flex">
+  <img src="https://pbs.twimg.com/media/FwPIT9TWcAEu6Km?format=jpg&name=medium" width="25%">
   <img src="https://pbs.twimg.com/media/Fv7oar_acAAs2X7?format=jpg&name=medium" width="50%">
 <img src="https://pbs.twimg.com/media/FvHSYQBWIAAzaSK?format=jpg&name=large" width="25%">
 </div>
