@@ -10,7 +10,10 @@
 <div styles="display:flex">
   <img src="https://pbs.twimg.com/media/FwPIT9TWcAEu6Km?format=jpg&name=medium" width="25%">
   <img src="https://pbs.twimg.com/media/Fv7oar_acAAs2X7?format=jpg&name=medium" width="50%">
-<img src="https://pbs.twimg.com/media/FvHSYQBWIAAzaSK?format=jpg&name=large" width="25%">
+  <img src="https://pbs.twimg.com/media/FvHSYQBWIAAzaSK?format=jpg&name=large" width="25%">
+  <a href="https://t.co/tbbtOJxzrB">
+    <img src="https://pbs.twimg.com/card_img/1681704424530378752/dTE47w_0?format=jpg&name=900x900" width="25%">
+  </a>
 </div>
 
 #### 5 CSS Games for Frontend Developers 
